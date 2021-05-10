@@ -1,5 +1,5 @@
 import {resolve} from 'fluture';
-import {Json} from 'fluture-express'
+import {Json} from 'fluture-express';
 
 import data from './fixture.mjs';
 

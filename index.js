@@ -1,16 +1,16 @@
-const {resolve} = require ('fluture')
-const {equivalence} = require ('fluture/test/assertions.js')
-const {Json} = require ('fluture-express')
+const {resolve} = require ('fluture');
+const {equivalence} = require ('fluture/test/assertions.js');
+const {Json} = require ('fluture-express');
 
-const data1 = require ('./fixture.js')
-const data2 = require ('./fixture.mjs')
+const data1 = require ('./fixture.js');
+const data2 = require ('./fixture.mjs');
 
-const testFunction1 = require ('./flutureTestSubject.js')
-const testFunction2 = require ('./flutureTestSubject.mjs')
-const testFunction3 = require ('./fluture-expressTestSubject.js')
-const testFunction4 = require ('./fluture-expressTestSubject.mjs')
+const testFunction1 = require ('./flutureTestSubject.js');
+const testFunction2 = require ('./flutureTestSubject.mjs');
+const testFunction3 = require ('./fluture-expressTestSubject.js');
+const testFunction4 = require ('./fluture-expressTestSubject.mjs');
 
-const errorHandler = error => console.error (error)
+const errorHandler = error => console.error (error);
 
 equivalence (resolve (data1)) (testFunction1)
 	.catch (errorHandler);

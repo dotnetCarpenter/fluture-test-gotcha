@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const {resolve} = require ('fluture');
 const {Json} = require ('fluture-express');

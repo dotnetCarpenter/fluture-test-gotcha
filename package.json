@@ -5,10 +5,11 @@
   "description": "When using fluture/test/assertions.js you need to be aware of the gotcha's in this repo.",
   "main": "index.mjs",
   "scripts": {
-    "test": "npm run test:commonjs & npm run test:node & npm run test:jasmine",
+    "test": "npm run test:commonjs & npm run test:node & npm run test:jasmine & npm run test:jasmine-gotcha",
     "test:node": "node .",
+    "test:commonjs": "node index.js",
     "test:jasmine": "jasmine spec.mjs",
-    "test:commonjs": "node index.js"
+    "test:jasmine-gotcha": "jasmine jasmine.mjs"
   },
   "keywords": [],
   "author": "",

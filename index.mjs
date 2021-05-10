@@ -1,22 +1,22 @@
-import {resolve} from 'fluture'
-import {equivalence} from 'fluture/test/assertions.js'
-import {Json} from 'fluture-express'
+import {resolve} from 'fluture';
+import {equivalence} from 'fluture/test/assertions.js';
+import {Json} from 'fluture-express';
 
-import data1 from './fixture.js'
-import data2 from './fixture.mjs'
+import data1 from './fixture.js';
+import data2 from './fixture.mjs';
 
-import testFunction1 from './flutureTestSubject.js'
-import testFunction2 from './flutureTestSubject.mjs'
-import testFunction3 from './fluture-expressTestSubject.js'
-import testFunction4 from './fluture-expressTestSubject.mjs'
+import testFunction1 from './flutureTestSubject.js';
+import testFunction2 from './flutureTestSubject.mjs';
+import testFunction3 from './fluture-expressTestSubject.js';
+import testFunction4 from './fluture-expressTestSubject.mjs';
 
-const errorHandler = error => console.error (error)
+const errorHandler = error => console.error (error);
 
 equivalence (resolve (data1)) (testFunction1)
 	.catch (errorHandler);
 
 equivalence (resolve (data2)) (testFunction1)
-.catch (errorHandler);
+	.catch (errorHandler);
 
 equivalence (resolve (data1)) (testFunction2)
 	.catch (errorHandler);
