@@ -3,14 +3,20 @@
   "private": true,
   "version": "1.0.0",
   "description": "When using fluture/test/assertions.js you need to be aware of the gotcha's in this repo.",
-  "main": "index.js",
+  "main": "index.mjs",
   "scripts": {
-    "test": "node ."
+    "test": "npm run test:node & npm run test:jasmine",
+    "test:node": "node .",
+    "test:jasmine": "jasmine spec.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "fluture": "^14.0.0",
+    "fluture-express": "^6.0.1"
+  },
   "devDependencies": {
-    "fluture": "^14.0.0"
+    "jasmine": "^3.7.0"
   }
 }
