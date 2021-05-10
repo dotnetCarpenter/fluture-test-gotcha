@@ -1,0 +1,16 @@
+{
+  "name": "fluture-test-gotcha",
+  "private": true,
+  "version": "1.0.0",
+  "description": "When using fluture/test/assertions.js you need to be aware of the gotcha's in this repo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fluture": "^14.0.0"
+  }
+}
