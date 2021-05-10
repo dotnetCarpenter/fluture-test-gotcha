@@ -1,14 +1,14 @@
-import {resolve} from 'fluture'
-import {equivalence} from 'fluture/test/assertions.js'
-import {Json} from 'fluture-express'
+const {resolve} = require ('fluture')
+const {equivalence} = require ('fluture/test/assertions.js')
+const {Json} = require ('fluture-express')
 
-import data1 from './fixture.js'
-import data2 from './fixture.mjs'
+const data1 = require ('./fixture.js')
+const data2 = require ('./fixture.mjs')
 
-import testFunction1 from './flutureTestSubject.js'
-import testFunction2 from './flutureTestSubject.mjs'
-import testFunction3 from './fluture-expressTestSubject.js'
-import testFunction4 from './fluture-expressTestSubject.mjs'
+const testFunction1 = require ('./flutureTestSubject.js')
+const testFunction2 = require ('./flutureTestSubject.mjs')
+const testFunction3 = require ('./fluture-expressTestSubject.js')
+const testFunction4 = require ('./fluture-expressTestSubject.mjs')
 
 const errorHandler = error => console.error (error)
 
