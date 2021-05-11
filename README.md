@@ -5,7 +5,7 @@ be aware of the gotcha's in this repository.
 
 **Using node v14.16.1**
 
-Do `npm test` to see all issues.
+Run `npm test` to see all issues in your terminal.
 
 
 ## fluture-express's Json
@@ -28,15 +28,50 @@ The inner values are not equal: Values have same structure but are not reference
 ```
 _Example of error message when `Json` is not imported via esm._
 
-However, note that it does not matter wether your test data is from a commonjs
+However, note that it does not matter if your test data is from a commonjs
 module or EcmaScript module (esm).
 
-_One possible explanation might be that the underlying issue is that
-`assert.strictEqual` from `'assert'` does not see objects wrapped in `Json` as
-reference-equal (`===`) for the same object if the `Json` container is referenced
-from esm **and** commonjs. Objects crossing this module border are no longer
-_"strictly"_ equal according to `assert.strictEqual`, when wrapped in a `Json`
-container. Why that is only applicable to the `Json` container, I do not know._
+The following code snippet (written with [Jasmine][Jasmine]) highlights the
+successful match and the failed match:
+
+```js
+// success
+it ('Future Json from esm and data from commonjs', () => {
+	return equivalence (resolve (Json (data1))) (testFunction4);
+});
+// failure
+it ('FAIL: Future Json from commonjs and data from commonjs', () => {
+	return equivalence (resolve (Json (data1))) (testFunction3);
+});
+```
+_spec.mjs_
+
+### One possible explanation
+
+1. `npm run strictEqual`
+
+While trying to find the underlying issue, I wrote _strictEqual.mjs_ and
+_strictEqual.js_, which uses `strictEqual` and `deepStrictEqual` from `'assert'`,
+which is what `equivalence` from `'fluture/test/assertions.js'` uses.
+Here, my findings are that **regardless** of module format, `deepStrictEqual`,
+will match `Json (data)` but `strictEqual` will not.
+
+```js
+// always success
+deepStrictEqual (Json (data1), Json (data1));
+deepStrictEqual (Json (data2), Json (data2));
+// always failure
+strictEqual (Json (data1), Json (data1));
+strictEqual (Json (data2), Json (data2));
+```
+
+The question now is, why does `equivalence` seeminly take a different code path
+when `Json` is imported from commonjs and esm, hence failing the test, but when
+`Json` is imported only from esm then passing the test? It seems that in the
+former case, `strictEqual` is used and in the latter case, `deepStrictEqual`.
+
+`strictEqual(show(a), show(b));` is used in `'fluture/test/assertions.js'` with
+`show` from `'sanctuary-show'`, so that might be the culprit.
 
 ## Writing your tests in a commonjs module
 
@@ -88,19 +123,18 @@ from `equivalence`:
 ```js
 describe ('Show how jasmine will display error messages from equivalence', () => {
 
-	it ('FAIL: Future Json from commonjs and data from commonjs', () =>
+	it ('bare equivalence: Future Json from commonjs and data from commonjs', () =>
 		equivalence (resolve (Json (data1))) (testFunction3));
 
-	it ('FAIL: Future Json from commonjs and data from commonjs', async () => {
+	it ('await equivalence: Future Json from commonjs and data from commonjs', async () => {
 		await equivalence (resolve (Json (data1))) (testFunction3);
 	});
 
-	it ('FAIL: Future Json from commonjs and data from commonjs', () => {
+	it ('Promise.all: Future Json from commonjs and data from commonjs', () => {
 		const actual = equivalence (resolve (Json (data1))) (testFunction3);
+		const result = expectAsync(actual).toBeResolvedTo(data1);
 
-		expectAsync(actual).toBeResolvedTo({foo: 'bar'});
-
-		return actual
+		return Promise.all ([actual, result]);
 	});
 
 });

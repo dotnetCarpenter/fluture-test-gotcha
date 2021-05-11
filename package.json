@@ -9,7 +9,8 @@
     "test:node": "node .",
     "test:commonjs": "node index.js",
     "test:jasmine": "jasmine spec.mjs",
-    "test:jasmine-gotcha": "jasmine jasmine.mjs"
+    "test:jasmine-gotcha": "jasmine jasmine.mjs",
+    "strictEqual": "node strictEqual.js & node strictEqual.mjs"
   },
   "keywords": [],
   "author": "",
