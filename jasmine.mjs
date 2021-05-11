@@ -22,27 +22,18 @@ describe ('Show that jasmine will suppress error messages from equivalence', () 
 
 describe ('Show how jasmine will display error messages from equivalence', () => {
 
-	it ('FAIL: Future Json from commonjs and data from commonjs', () =>
+	it ('bare equivalence: Future Json from commonjs and data from commonjs', () =>
 		equivalence (resolve (Json (data1))) (testFunction3));
 
-	it ('FAIL: Future Json from commonjs and data from commonjs', async () => {
+	it ('await equivalence: Future Json from commonjs and data from commonjs', async () => {
 		await equivalence (resolve (Json (data1))) (testFunction3);
 	});
 
-	it ('FAIL: Future Json from commonjs and data from commonjs', () => {
+	it ('Promise.all: Future Json from commonjs and data from commonjs', () => {
 		const actual = equivalence (resolve (Json (data1))) (testFunction3);
+		const result = expectAsync(actual).toBeResolvedTo(data1);
 
-		expectAsync(actual).toBeResolvedTo({foo: 'bar'});
-
-		return actual;
-	});
-
-	it ('FAIL: Future Json from commonjs and data from commonjs', async () => {
-		const actual = await equivalence (resolve (Json (data1))) (testFunction3);
-
-		expectAsync(actual).toBeResolvedTo({foo: 'bar'});
-
-		return actual;
+		return Promise.all ([actual, result]);
 	});
 
 });

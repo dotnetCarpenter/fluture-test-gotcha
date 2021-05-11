@@ -42,7 +42,7 @@ describe ('Test Future Express equivalence between module formats', () => {
 
 	it ('Future Json from esm and data from commonjs', () => {
 		return equivalence (resolve (Json (data1))) (testFunction4);
-	});;
+	});
 
 	it ('Future Json from esm and data from esm', () => {
 		return equivalence (resolve (Json (data2))) (testFunction4);
