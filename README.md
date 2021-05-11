@@ -70,8 +70,8 @@ when `Json` is imported from commonjs and esm, hence failing the test, but when
 `Json` is imported only from esm then passing the test? It seems that in the
 former case, `strictEqual` is used and in the latter case, `deepStrictEqual`.
 
-`strictEqual(show(a), show(b));` is used in `'fluture/test/assertions.js'` with
-`show` from `'sanctuary-show'`, so that might be the culprit.
+`strictEqual(show(a), show(b));` is used in `'fluture/test/assertions.js'` line
+9, with `show` from `'sanctuary-show'`, so that might be the culprit.
 
 ## Writing your tests in a commonjs module
 
