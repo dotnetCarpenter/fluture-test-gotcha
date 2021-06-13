@@ -3,10 +3,25 @@
 When writing unit test for code that is using `'fluture-express'` you need to
 be aware of the gotcha's in this repository.
 
+### TL;DR
+
+>`equivalence` checks the inner value of two Futures using `assert.deepStrictEqual`.
+That in turn test the prototypes of the inner value.
+Because `Json` has a CommonJS version and a ESM version, those two prototypes
+will be different and `equivalence` will fail for two seemingly identical values.
+
+_[- Main issue](#main-issue)_
+
+-----------------------------------------------------------------
+
 **Using node v14.16.1**
 
 Run `npm test` to see all issues in your terminal.
 
+- [fluture-express's Json](#fluture-expresss-json)
+	- [Main issue](#main-issue)
+- [Writing your tests in a commonjs module](#writing-your-tests-in-a-commonjs-module)
+- [Using Jasmine as test runner](#using-jasmine-as-test-runner)
 
 ## fluture-express's Json
 
@@ -46,32 +61,41 @@ it ('FAIL: Future Json from commonjs and data from commonjs', () => {
 ```
 _spec.mjs_
 
-### One possible explanation
+### Main issue
 
-1. `npm run strictEqual`
+1. `npm run test:prototype`
 
-While trying to find the underlying issue, I wrote _strictEqual.mjs_ and
-_strictEqual.js_, which uses `strictEqual` and `deepStrictEqual` from `'assert'`,
-which is what `equivalence` from `'fluture/test/assertions.js'` uses.
-Here, my findings are that **regardless** of module format, `deepStrictEqual`,
-will match `Json (data)` but `strictEqual` will not.
+`equivalence` checks the inner value of two Futures using `assert.deepStrictEqual`.
+That in turn test the prototypes of the inner value.
+Because `Json` has a CommonJS version and a ESM version, those two prototypes
+will be different and `equivalence` will fail for two seemingly identical values.
+
+The following code illustrates the issue, where `Json` and `esmJson`
+is `import {Json} from 'fluture-express'`, the latter from a separate
+esm file. `commonjsJson` is `const {Json} = require ('fluture-express')`
+from _mainIssue.js_.
 
 ```js
-// always success
-deepStrictEqual (Json (data1), Json (data1));
-deepStrictEqual (Json (data2), Json (data2));
-// always failure
-strictEqual (Json (data1), Json (data1));
-strictEqual (Json (data2), Json (data2));
+const localJsonPrototype    = Object.getPrototypeOf (Json (data)),
+      esmJsonPrototype      = Object.getPrototypeOf (esmJson (data)),
+      commonjsJsonPrototype = Object.getPrototypeOf (commonjsJson (data))
+
+localJsonPrototype === esmJsonPrototype
+localJsonPrototype !== commonjsJsonPrototype
+esmJsonPrototype !== commonjsJsonPrototype
+
+// Success because deepStrictEqual is on `data` and not Future
+equivalence (commonjsResolve (data)) (resolve (data))
+
+// Success because instances of esmJson and Json has same prototype
+equivalence (commonjsResolve (esmJson (data))) (resolve (Json (data)))
+deepStrictEqual (esmJson (data), Json (data))
+
+// Failure because instances of commonjsJson and esmJson does not have same
+// prototype
+equivalence (commonjsResolve (commonjsJson (data))) (resolve (esmJson (data)))
 ```
 
-The question now is, why does `equivalence` seeminly take a different code path
-when `Json` is imported from commonjs and esm, hence failing the test, but when
-`Json` is imported only from esm then passing the test? It seems that in the
-former case, `strictEqual` is used and in the latter case, `deepStrictEqual`.
-
-`strictEqual(show(a), show(b));` is used in `'fluture/test/assertions.js'` line
-9, with `show` from `'sanctuary-show'`, so that might be the culprit.
 
 ## Writing your tests in a commonjs module
 

@@ -44,6 +44,8 @@ console.log (commonjsJsonPrototype, `commonjsJsonPrototype: is === to esmJsonPro
 
 // Success because instances of esmJson and Json has same prototype
 tryCatch (equivalence (commonjsResolve (esmJson (data))) (resolve (Json (data))))
+tryCatch (() => deepStrictEqual (esmJson (data), Json (data)))
+
 
 // Failure because equivalence only works for Futures, anything else is never equal
 // tryCatch (equivalence (commonjsJson (data)) (esmJson (data)))
